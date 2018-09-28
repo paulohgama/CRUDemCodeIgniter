@@ -45,8 +45,8 @@
                                   <a href="#"><i class="fa fa-bars fa-lg"></i> Subcategorias <span class="arrow"></span></a>
                                 </li>
                                 <ul class="sub-menu collapse" id="new">
-                                    <li><a href="#">Cadastrar Categoriia</a></li>
-                                    <li><a href="#">Listar Categorias</a></li>
+                                    <li><a href="<?=base_url().'subcategoria/cadastrar'?>">Cadastrar Subcategoria</a></li>
+                                    <li><a href="<?=base_url().'subcategoria'?>">Listar Subcategorias</a></li>
                                 </ul>
                                  <li>
                                   <a href="#"><i class="fa fa-info-circle fa-lg"></i> Sobre</a>

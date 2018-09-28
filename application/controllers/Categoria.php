@@ -97,7 +97,7 @@ class Categoria extends CI_Controller
                     $rules['categoria_nome'] = array('trim', 'required');
             break;
             default:
-		$rules['email'] = array('trim', 'required', 'is_unique[categorias.cateoria_nome]');
+		$rules['categoria_nome'] = array('trim', 'required', 'is_unique[categorias.cateoria_nome]');
             break;
 	}
 	$this->form_validation->set_rules('categoria_nome', 'Categoria', $rules['categoria_nome']);

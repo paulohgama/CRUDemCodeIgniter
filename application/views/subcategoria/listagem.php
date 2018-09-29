@@ -1,28 +1,38 @@
-<table class="table-responsive">
-    <caption>Subcategorias</caption>
+<script src="assets/jquery.js" type="text/javascript"></script>
+<script src="assets/dataTable.js" type="text/javascript"></script>
+<link href="assets/css.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript"> 
+    $(document).ready(function (){
+       var dataTable = $('#tabelaSubcategoria').DataTable({
+           "processing": true,
+           "serverSide": true,
+           "order": [],
+           "ajax": {
+               "url": "<?= base_url().'subcategoria/pega_dados'?>",
+               "type": "POST"
+           },
+           "columnsDefs": [
+                {
+                    "target": [3, 4],
+                    "orderable":false
+                }
+           ]
+       }); 
+    });
+</script>
+
+<table id="tabelaSubcategoria" class="table-responsive">
     <thead>
         <tr>
-            <th>ID</th>
+            <th>#</th>
             <th>Subcategoria</th>
             <th>Categoria</th>
-            <th colspan="2">Ações</th>
+            <th>Editar</th>
+            <th>Deletar</th>
         </tr>
     </thead>
     <tbody>
-        <?php if ($subcategoria == FALSE): ?>
-        <tr><td colspan="5" style="color: red; font: bold">Nenhuma subcategoria encontrada</td></tr>
-        <?php else: ?>
-            <?php foreach ($subcategoria as $subcategorias): ?>
-		<tr>
-                    <td><?= $subcategorias['subcategoria_id'] ?></td>
-                    <td><?= $subcategorias['subcategoria_nome'] ?></td>                   
-                    <td><?= $subcategorias['categoria_nome'] ?></td>                   
-                    <td><a href="<?= $subcategorias['editar_url'] ?>"  class="btn btn-warning" >Editar</a> 
-                        <a href="<?= $subcategorias['excluir_url'] ?>"  class="btn btn-danger" >Excluir</a>
-                    </td>
-		</tr>
-            <?php endforeach; ?>
-	<?php endif; ?>
+
     </tbody>
 </table>
 <?php if ($this->session->flashdata('error') == TRUE): ?>

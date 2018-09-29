@@ -4,8 +4,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="robots" content="noindex, nofollow">
-
+    <script type="text/javascript" charset="utf-8" language="javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script type="text/javascript" charset="utf-8" language="javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <title>Pagina Inicial</title>
+    <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <?php include_once 'includes/navbar.php'; ?>
 </head>

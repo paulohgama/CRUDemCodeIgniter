@@ -1,26 +1,37 @@
-<table class="table-responsive">
-    <caption>Categorias</caption>
+<script src="assets/jquery.js" type="text/javascript"></script>
+<script src="assets/dataTable.js" type="text/javascript"></script>
+<link href="assets/css.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript"> 
+    $(document).ready(function (){
+       var dataTable = $('#tabelaCategoria').DataTable({
+           "processing": true,
+           "serverSide": true,
+           "order": [],
+           "ajax": {
+               "url": "<?= base_url().'categoria/pega_dados'?>",
+               "type": "POST"
+           },
+           "columnsDefs": [
+                {
+                    "target": [2, 3],
+                    "orderable":false
+                }
+           ]
+       }); 
+    });
+</script>
+
+<table id="tabelaCategoria" class="table-responsive">
     <thead>
         <tr>
-            <th>ID</th>
+            <th>#</th>
             <th>Categoria</th>
-            <th colspan="2">Ações</th>
+            <th>Editar</th>
+            <th>Deletar</th>
         </tr>
     </thead>
     <tbody>
-        <?php if ($categorias == FALSE): ?>
-	<tr><td colspan="2">Nenhuma categoria encontrada</td></tr>
-        <?php else: ?>
-            <?php foreach ($categorias as $categoria): ?>
-		<tr>
-                    <td><?= $categoria['categoria_id'] ?></td>
-                    <td><?= $categoria['categoria_nome'] ?></td>
-                    <td><a href="<?= $categoria['editar_url'] ?>"  class="btn btn-warning" >Editar</a> 
-                        <a href="<?= $categoria['excluir_url'] ?>"  class="btn btn-danger" >Excluir</a>
-                    </td>
-		</tr>
-            <?php endforeach; ?>
-	<?php endif; ?>
+
     </tbody>
 </table>
 <?php if ($this->session->flashdata('error') == TRUE): ?>

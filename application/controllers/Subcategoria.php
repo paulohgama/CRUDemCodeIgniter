@@ -14,7 +14,28 @@ class Subcategoria extends CI_Controller
 	$dados['subcategoria'] = $this->subcategoria_model->Formatar($subcategoria);
         $this->template->load('template', 'subcategoria/listagem',$dados);
     }
-    
+    public function PegaDados()
+    {
+        $pegadados = $this->subcategoria_model->criar_datatable();
+        $dados = array();
+        foreach ($pegadados as $row) {
+            $sub_dados = array();
+            $sub_dados[] = $row->subcategoria_id;
+            $sub_dados[] = $row->subcategoria_nome;
+            $sub_dados[] = $row->categoria_nome;
+            $sub_dados[] = "<a href='".base_url('subcategoria/editar')."/".$row->subcategoria_id."' role='button' class='btn btn-success'>Editar</a>";
+            $sub_dados[] = "<a href='".base_url('subcategoria/excluir')."/".$row->subcategoria_id."' role='button' class='btn btn-danger'>Excluir</a>";
+            $dados[] = $sub_dados;
+        }
+        
+        $output = array (
+            "draw"  => intval($_POST["draw"]),
+            "recordsTotal" => $this->subcategoria_model->getAllData(), 
+            "recordsFiltered" => $this->subcategoria_model->getFilteredData(),
+            "data" => $dados
+        );
+        echo json_encode($output);
+    }
     public function Salvar(){
         $subcategoria = $this->subcategoria_model->GetAll('subcategoria_nome');
 	$dados['categorias'] = $this->subcategoria_model->Formatar($subcategoria);

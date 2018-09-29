@@ -8,11 +8,31 @@ class Categoria extends CI_Controller
     }
     
     public function Mostrar(){
-        $categoria = $this->categoria_model->GetAll('categoria_nome');
-	$dados['categorias'] = $this->categoria_model->Formatar($categoria);
-        $this->template->load('template', 'categoria/listagem',$dados);
+        $this->template->load('template', 'categoria/listagem');
     }
     
+    public function PegaDados()
+    {
+        $pegadados = $this->categoria_model->criar_datatable();
+        $dados = array();
+        foreach ($pegadados as $row) {
+            $sub_dados = array();
+            $sub_dados[] = $row->categoria_id;
+            $sub_dados[] = $row->categoria_nome;
+            $sub_dados[] = "<a href='".base_url('categoria/editar')."/".$row->categoria_id."' role='button' class='btn btn-success'>Editar</a>";
+            $sub_dados[] = "<a href='".base_url('categoria/excluir')."/".$row->categoria_id."' role='button' class='btn btn-danger'>Excluir</a>";
+            $dados[] = $sub_dados;
+        }
+        
+        $output = array (
+            "draw"  => intval($_POST["draw"]),
+            "recordsTotal" => $this->categoria_model->getAllData(), 
+            "recordsFiltered" => $this->categoria_model->getFilteredData(),
+            "data" => $dados
+        );
+        echo json_encode($output);
+    }
+
     public function Salvar(){
         $categoria = $this->categoria_model->GetAll('categoria_nome');
 	$dados['categorias'] = $this->categoria_model->Formatar($categoria);

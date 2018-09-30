@@ -57,24 +57,7 @@ class subcategoria_model extends MY_Model
         $this->db->from($this->table);
         return $this->db->count_all_results();
     }
-    
-    function Formatar($subcategoria)
-    {
-        if($subcategoria)
-        {
-            for($i = 0; $i < count($subcategoria); $i++)
-            {
-                $subcategoria[$i]['editar_url'] = base_url('subcategoria/editar')."/".$subcategoria[$i]['subcategoria_id'];
-                $subcategoria[$i]['excluir_url'] = base_url('subcategoria/excluir')."/".$subcategoria[$i]['subcategoria_id'];
-            }
-            return $subcategoria;
-        }
-        else 
-        {
-            return false;
-        }
-    }
-    
+     
     function GetJoin()
     {
         $this->db->select('*');

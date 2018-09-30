@@ -3,17 +3,17 @@
 <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript"> 
     $(document).ready(function (){
-       var dataTable = $('#tabelaSubcategoria').DataTable({
+       var dataTable = $('#tabelaUsuario').DataTable({
            "processing": true,
            "serverSide": true,
            "order": [],
            "ajax": {
-               "url": "<?= base_url().'subcategoria/pega_dados'?>",
+               "url": "<?= base_url().'usuario/pega_dados'?>",
                "type": "POST"
            },
            "columnsDefs": [
                 {
-                    "target": [3, 4],
+                    "target": [6, 7],
                     "orderable":false
                 }
            ],
@@ -38,10 +38,13 @@
     });
 </script>
 
-<table id="tabelaSubcategoria" class="table-responsive">
+<table id="tabelaUsuario" class="table-responsive">
     <thead>
         <tr>
             <th>#</th>
+            <th>Nome</th>
+            <th>E-mail</th>
+            <th>Data</th>
             <th>Subcategoria</th>
             <th>Categoria</th>
             <th>Editar</th>

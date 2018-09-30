@@ -35,7 +35,7 @@ $(document).ready(function(){
             var option = "<option value=''>Selecione subcategoria</option>"; 
             if (dados.length > 0){
                 $.each(dados, function(i, obj){
-                    option += '<option value=">'+obj.subcategoria_id+'">'+
+                    option += "<option value='"+obj.subcategoria_id+"'>"+
                         obj.subcategoria_nome+'</option>';
                 });
             }
@@ -52,38 +52,38 @@ $(document).ready(function(){
     }
     });
 </script>
-<form class="form-horizontal" action="/action_page.php">
+<form class="form-horizontal" method="POST" action="<?= base_url('usuario/salvar')?>">
   <div class="form-group">
     <label class="control-label col-sm-2" for="nome">Nome:</label>
     <div class="col-sm-10">
-        <input type="text" name="nome" class="form-control" id="nome" placeholder="Coloque seu nome">
+        <input type="text" name="usuario_nome" class="form-control" id="nome" placeholder="Coloque seu nome">
     </div>
   </div>
   <div class="form-group">
     <label class="control-label col-sm-2" for="email">Email:</label>
     <div class="col-sm-10"> 
-        <input type="text" name="email" class="form-control" id="email" placeholder="Coloque seu email">
+        <input type="text" name="usuario_email" class="form-control" id="email" placeholder="Coloque seu email">
     </div>
   </div>
   <div class="form-group">
     <label class="control-label col-sm-2" for="calendar">Data de nascimento:</label>
     <div class="col-sm-10"> 
-        <input type="text" name="data" class="form-control" id="calendar" placeholder="Coloque sua data de nascimento">
+        <input type="text" name="usuario_data" class="form-control" id="calendar" placeholder="Coloque sua data de nascimento">
     </div>
   </div>
   <div class="form-group">
         <label class="control-label col-sm-2" for="categoria">Categoria:</label>
         <div class="col-sm-10">
-            <select class="form-control" name="categoria" id="categoria" placeholder="Categoria">
+            <select class="form-control" id="categoria" placeholder="Categoria">
                 <option value="">Carregar uma categoria</option>
                 
             </select>
     </div>
     </div>
       <div class="form-group">
-        <label class="control-label col-sm-2" for="subcategori">Subcategoria:</label>
+        <label class="control-label col-sm-2" for="subcategoria">Subcategoria:</label>
         <div class="col-sm-10">
-            <select class="form-control" name="subcategoria" id="subcategoria" placeholder="Subcategoria"/>
+            <select class="form-control" name="subcategoria_fk" id="subcategoria" placeholder="Subcategoria"/>
                 <option value="">Carregar a subcategoria</option>
             
             </select>

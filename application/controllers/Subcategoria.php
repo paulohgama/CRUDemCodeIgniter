@@ -10,9 +10,7 @@ class Subcategoria extends CI_Controller
     }
     
     public function Mostrar(){
-        $subcategoria = $this->subcategoria_model->GetJoin();
-	$dados['subcategoria'] = $this->subcategoria_model->Formatar($subcategoria);
-        $this->template->load('template', 'subcategoria/listagem',$dados);
+        $this->template->load('template', 'subcategoria/listagem');
     }
     public function PegaDados()
     {
@@ -37,8 +35,6 @@ class Subcategoria extends CI_Controller
         echo json_encode($output);
     }
     public function Salvar(){
-        $subcategoria = $this->subcategoria_model->GetAll('subcategoria_nome');
-	$dados['categorias'] = $this->subcategoria_model->Formatar($subcategoria);
         $validacao = self::Validar();
 	if($validacao)
         {
@@ -58,7 +54,7 @@ class Subcategoria extends CI_Controller
         {
             $this->session->set_flashdata('error', validation_errors('<p>','</p>'));
         }
-        $this->template->load('template', 'subcategoria/listagem',$dados);
+        $this->template->load('template', 'subcategoria/listagem');
     }
     
     public function Editar(){
@@ -117,12 +113,15 @@ class Subcategoria extends CI_Controller
         {
             case 'insert':
             	$rules['subcategoria_nome'] = array('trim', 'required', 'min_length[3]', 'max_length[50]','is_unique[subcategorias.subcategoria_nome]');
+            	$rules['categoria_fk'] = array('trim', 'required');
             break;
 		case 'update':
                     $rules['subcategoria_nome'] = array('trim', 'required');
+                    $rules['categoria_fk'] = array('trim', 'required');
             break;
             default:
 		$rules['subcategoria_nome'] = array('trim', 'required', 'is_unique[subcategorias.cateoria_nome]');
+		$rules['categoria_fk'] = array('trim', 'required');
             break;
 	}
 	$this->form_validation->set_rules('subcategoria_nome', 'Subcategoria', $rules['subcategoria_nome']);

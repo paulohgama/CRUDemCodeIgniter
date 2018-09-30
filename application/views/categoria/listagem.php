@@ -1,6 +1,6 @@
-<script src="assets/jquery.js" type="text/javascript"></script>
-<script src="assets/dataTable.js" type="text/javascript"></script>
-<link href="assets/css.css" rel="stylesheet" type="text/css"/>
+<script src="https://code.jquery.com/jquery-3.3.1.js" type="text/javascript"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" type="text/javascript"></script>
+<link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript"> 
     $(document).ready(function (){
        var dataTable = $('#tabelaCategoria').DataTable({

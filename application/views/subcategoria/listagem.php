@@ -16,7 +16,24 @@
                     "target": [3, 4],
                     "orderable":false
                 }
-           ]
+           ],
+           "language": {
+                "zeroRecords": "Nada encontrado - desculpe",
+                "info": "Mostrando pagina _PAGE_ de _PAGES_",
+                "infoEmpty": "Nenhum registro disponivel",
+                "infoFiltered": "(filtrado do total de _MAX_ registros)",
+                "paginate": {
+                    "first":      "Primeira",
+                    "last":       "Ultima",
+                    "next":       "Proxima",
+                    "previous":   "Anterior"
+                },
+                "search":         "Pesquisar:",
+                "loadingRecords": "Carregando...",
+                "processing":     "Processando..."
+        },
+            "lengthChange": false,
+            "pageLength": 15
        }); 
     });
 </script>

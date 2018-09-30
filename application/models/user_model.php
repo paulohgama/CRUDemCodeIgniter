@@ -2,11 +2,20 @@
 
 class user_model extends MY_Model
 {
+    function GetSub($id)
+    {
+        $this->db->select("*");
+        $this->db->from("subcategorias");
+        $this->db->where("categoria_fk", $id);
+        $query = $this->db->get();
+        return $query->result();
+    }
     
+    function GetCategoria()
+    {
+        $this->db->select("*");
+        $this->db->from('categorias');
+        $query = $this->db->get();
+        return $query->result();
+    }
 }
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-

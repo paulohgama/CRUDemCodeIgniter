@@ -7,43 +7,66 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         
              $this->template->load('template','posts/criarPost');
         }
-
-        public function Recortar(){
-        $configUpload['upload_path']   = './uploads/imagens';
-        $configUpload['allowed_types'] = 'jpg|png';
-        $configUpload['encrypt_name']  = TRUE;
-        $this->upload->initialize($configUpload);
-        if ( ! $this->upload->do_upload('foto'))
+        public function Usuario()
         {
-            $data= array('error' => $this->upload->display_errors());
-            $this->template->load('template','usuarios/cadastrar',$data);
+            $dados = $this->posts_model->GetUsuario();
+            echo json_encode($dados);
+        
         }
-        else
-        {
-            $dadosImagem = $this->upload->data();
-            $tamanhos = $this->CalculaPercetual($this->input->post());
-            $configCrop['image_library'] = 'gd2';
-            $configCrop['source_image']  = $dadosImagem['full_path'];
-            $configCrop['new_image']     = './uploads/crops/';
-            $configCrop['maintain_ratio']= FALSE;
-            $configCrop['quality']             = 100;
-            $configCrop['width']         = $tamanhos['wcrop'];
-            $configCrop['height']        = $tamanhos['hcrop'];
-            $configCrop['x_axis']        = $tamanhos['x'];
-            $configCrop['y_axis']        = $tamanhos['y'];
-            $this->image_lib->initialize($configCrop);
-            if ( ! $this->image_lib->crop())
+        public function RecortarSalvar(){
+        $validacao = self::Validar();
+        if($validacao)
+        {   
+            $post = $this->input->post();
+            $configUpload['upload_path']   = './uploads/imagens';
+            $configUpload['allowed_types'] = 'jpg|png';
+            $configUpload['encrypt_name']  = TRUE;
+            $this->upload->initialize($configUpload);
+            if ( ! $this->upload->do_upload('post_foto'))
             {
-                $data = array('error' => $this->image_lib->display_errors());
-                $this->template->load('template','usuarios/cadastrar',$data);            }
+                $data= array('error' => $this->upload->display_errors());
+                $this->template->load('template','posts/criarPost',$data);
+            }
             else
             {
-                $urlImagem = base_url('uploads/crops/'.$dadosImagem['file_name']);
-                $this->session->set_flashdata('urlImagem', $urlImagem);
-                $this->session->set_flashdata('dadosImagem', $dadosImagem);
-                $this->session->set_flashdata('dadosCrop', $tamanhos);
-                $this->template->load('template','usuarios/cadastrar',$data);
+                $dadosImagem = $this->upload->data();
+                $tamanhos = $this->CalculaPercetual($this->input->post());
+                $configCrop['image_library'] = 'gd2';
+                $configCrop['source_image']  = $dadosImagem['full_path'];
+                $configCrop['new_image']     = './uploads/crops/';
+                $configCrop['maintain_ratio']= FALSE;
+                $configCrop['quality']       = 100;
+                $configCrop['width']         = $tamanhos['wcrop'];
+                $configCrop['height']        = $tamanhos['hcrop'];
+                $configCrop['x_axis']        = $tamanhos['x'];
+                $configCrop['y_axis']        = $tamanhos['y'];
+                $this->image_lib->initialize($configCrop);
+                if ( ! $this->image_lib->crop())
+                {
+                    $data = array('error' => $this->image_lib->display_errors());
+                    $this->template->load('template','posts/criarPost',$data);            }
+                else
+                {
+                    $urlImagem = base_url('uploads/crops/'.$dadosImagem['file_name']);
+                    $post->post_foto = $urlImagem;
+                    $status = $this->user_model->Inserir($post);
+                    if(!$status)
+                    {   
+                        $this->session->set_flashdata('error', 'Não foi possível postar.');
+                    }
+                    else
+                    {
+                        $this->session->set_flashdata('success', 'Postado com sucesso.');
+                        $this->template->load('template', 'posts/criarPost');
+                    }
+                    $this->template->load('template','posts/criarPost');
+                }
             }
+        }
+        else 
+        {
+            $this->session->set_flashdata('error', validation_errors('<p>','</p>'));
+            $this->template->load('template', 'posts/criarPost');
         }
     }
  

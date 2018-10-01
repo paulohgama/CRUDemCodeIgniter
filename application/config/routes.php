@@ -32,5 +32,7 @@ $route['subcategoria/atualizar'] = "Subcategoria/Atualizar";
 $route['subcategoria/excluir/(:num)'] = "Subcategoria/Excluir/$1";
 
 $route['posts/criarpost'] = 'Posts/Criar';
+$route['posts/usuario'] = 'Posts/Usuario';
+$route['posts/salvar'] = 'Posts/RecortarSalvar';
 $route['posts/meusposts'] = 'Posts/Meus';
 $route['posts/todosposts'] = 'Posts/Todos';

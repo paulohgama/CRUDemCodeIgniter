@@ -2,7 +2,6 @@ $(document).ready(function(){
     $("#seleciona-imagem").on('change', function () {
  
     if (typeof (FileReader) != "undefined") {
- 
         var image_holder = $("#imagem-box");
         image_holder.empty();
  

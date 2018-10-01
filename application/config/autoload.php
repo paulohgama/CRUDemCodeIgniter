@@ -7,4 +7,4 @@ $autoload['drivers'] = array();
 $autoload['helper'] = array('url');
 $autoload['config'] = array();
 $autoload['language'] = array();
-$autoload['model'] = array('categoria_model', 'subcategoria_model', 'user_model');
+$autoload['model'] = array('categoria_model', 'subcategoria_model', 'user_model', 'posts_model');

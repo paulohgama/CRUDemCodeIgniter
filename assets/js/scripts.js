@@ -1,19 +1,38 @@
 $(document).ready(function(){
-    $("#foto").change(function(){
-        if (this.files && this.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function (e) {
-                $('#visulizar').attr('src', e.target.result);
-                $('#visulizar').Jcrop({
-                    aspectRatio: 1,
-                    onSelect: atualizaCoordenadas,
-                    onChange: atualizaCoordenadas
-                });
-            defineTamanhoImagem(e.target.result,$('#visulizar'));
-            };
-            reader.readAsDataURL(this.files[0]);
+    $("#seleciona-imagem").on('change', function () {
+ 
+    if (typeof (FileReader) != "undefined") {
+ 
+        var image_holder = $("#imagem-box");
+        image_holder.empty();
+ 
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            var image = $("<img />", {
+                "src": e.target.result,
+                "class": "thumb-image",
+                "style": "width: 600px;"
+            }).appendTo(image_holder);
+            image.Jcrop({
+              aspectRatio: 1,
+              onSelect: atualizaCoordenadas,
+              onChange: atualizaCoordenadas
+            });
+            defineTamanhoImagem(e.target.result, image);
         }
-    });
+        image_holder.show();
+        reader.readAsDataURL($(this)[0].files[0]);
+    } else{
+        alert("Este navegador nao suporta FileReader.");
+    }
+});
+
+  $('#recortar-imagem').click(function(){
+    if (parseInt($('#wcrop').val())) return true;
+    alert('Selecione a área de corte para continuar.');
+    return false;
+  });
+})
 
 function atualizaCoordenadas(c)
 {
@@ -22,7 +41,7 @@ function atualizaCoordenadas(c)
   $('#wcrop').val(c.w);
   $('#hcrop').val(c.h);
 };
- 
+
 function defineTamanhoImagem(imgOriginal, imgVisualizacao) {
   var image = new Image();
   image.src = imgOriginal;
@@ -34,4 +53,3 @@ function defineTamanhoImagem(imgOriginal, imgVisualizacao) {
     $('#horiginal').val(this.height);
   };
 }
-});

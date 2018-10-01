@@ -26,13 +26,21 @@
                                 <li>
                                     <a href="<?= base_url()?>"><i class="fa fa-home fa-lg"></i>Home</a>
                                 </li>
-                                <li  data-toggle="collapse" data-target="#users" class="collapsed active">
+                                <li  data-toggle="collapse" data-target="#users">
                                   <a href="#"><i class="fa fa-users fa-lg"></i> Usuarios <span class="arrow"></span></a>
                                 </li>
                                 <ul class="sub-menu collapse" id="users">
-                                    <!-- class="active" no li -->
-                                    <li><a href="<?=base_url().'usuario/cadastrar'?>" id="formCadastro">Cadastrar Usuario</a></li>
+                                    <li><a href="<?=base_url().'usuario/cadastrar'?>">Cadastrar Usuario</a></li>
                                     <li><a href="<?=base_url().'usuario'?>">Listar Usuarios</a></li>
+                                </ul>
+                                <li  data-toggle="collapse" data-target="#posts">
+                                  <a href="#"><i class="fa fa-paste fa-lg"></i> Posts <span class="arrow"></span></a>
+                                </li>
+                                <ul class="sub-menu collapse" id="posts">
+                                    <!-- class="active" no li -->
+                                    <li><a href="<?=base_url().'posts/criarpost'?>" id="formCadastro">Criar Post</a></li>
+                                    <li><a href="<?=base_url().'posts/meusposts'?>">Listar Meus Posts</a></li>
+                                    <li><a href="<?=base_url().'posts/todosposts'?>">Listar Todos os Posts</a></li>
                                 </ul>
                                 <li data-toggle="collapse" data-target="#categorias" class="collapsed">
                                   <a href="#"><i class="fa fa-bars fa-lg"></i> Categorias <span class="arrow"></span></a>
@@ -41,8 +49,6 @@
                                     <li><a href="<?=base_url().'categoria/cadastrar'?>">Cadastrar Categoria</a></li>
                                     <li><a href="<?=base_url().'categoria'?>">Listar Categorias</a></li>
                                 </ul>
-
-
                                 <li data-toggle="collapse" data-target="#new" class="collapsed">
                                   <a href="#"><i class="fa fa-bars fa-lg"></i> Subcategorias <span class="arrow"></span></a>
                                 </li>

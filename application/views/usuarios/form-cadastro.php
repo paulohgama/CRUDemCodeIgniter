@@ -16,8 +16,8 @@ $(document).ready(function(){
         });
 
     $.getJSON("<?= base_url().'usuario/categoria'?>", function(dados){
-            var option = "<option value=''>Selecione categoria</option>"; 
             if (dados.length > 0){
+                var option = "<option value=''>Selecione categoria</option>"; 
                 $.each(dados, function(i, obj){
                     option += "<option value='"+obj.categoria_id+"'>"+
                         obj.categoria_nome+"</option>";

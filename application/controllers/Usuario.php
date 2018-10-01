@@ -134,14 +134,19 @@ class Usuario extends CI_Controller
             	$rules['usuario_data'] = array('trim', 'required', 'min_length[3]', 'max_length[20]');
             	$rules['subcategoria_fk'] = array('trim', 'required');
             break;
-		case 'update':
-                    $rules['subcategoria_nome'] = array('trim', 'required');
+            case 'update':
+                $rules['usuario_nome'] = array('trim', 'required', 'min_length[3]', 'max_length[100]');
+            	$rules['usuario_email'] = array('trim', 'required', 'min_length[3]', 'max_length[100]');
+            	$rules['usuario_data'] = array('trim', 'required', 'min_length[3]', 'max_length[20]');
+            	$rules['subcategoria_fk'] = array('trim', 'required');            
             break;
             default:
-		$rules['subcategoria_nome'] = array('trim', 'required', 'is_unique[subcategorias.cateoria_nome]');
-            break;
-	}
-	$this->form_validation->set_rules('usuario_nome', 'Usuario', $rules['usuario_nome']);
+		$rules['usuario_nome'] = array('trim', 'required', 'min_length[3]', 'max_length[100]');
+            	$rules['usuario_email'] = array('trim', 'required', 'min_length[3]', 'max_length[100]','is_unique[usuarios.usuario_email]');
+            	$rules['usuario_data'] = array('trim', 'required', 'min_length[3]', 'max_length[20]');
+            	$rules['subcategoria_fk'] = array('trim', 'required');
+        }
+        $this->form_validation->set_rules('usuario_nome', 'Usuario', $rules['usuario_nome']);
 	$this->form_validation->set_rules('usuario_email', 'Usuario', $rules['usuario_email']);
 	$this->form_validation->set_rules('usuario_data', 'Usuario', $rules['usuario_data']);
 	$this->form_validation->set_rules('subcategoria_fk', 'Usuario', $rules['subcategoria_fk']);

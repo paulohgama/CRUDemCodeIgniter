@@ -18,10 +18,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         if($validacao)
         {   
             $post = $this->input->post();
-            $configUpload['upload_path']   = './uploads/imagens';
+            $configUpload['upload_path']   = realpath(APPPATH . '../uploads/images/');
             $configUpload['allowed_types'] = 'jpg|png';
             $configUpload['encrypt_name']  = TRUE;
             $this->upload->initialize($configUpload);
+            //return var_dump( $configUpload['upload_path']);
             if ( ! $this->upload->do_upload('post_foto'))
             {
                 $data= array('error' => $this->upload->display_errors());
@@ -33,7 +34,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 $tamanhos = $this->CalculaPercetual($this->input->post());
                 $configCrop['image_library'] = 'gd2';
                 $configCrop['source_image']  = $dadosImagem['full_path'];
-                $configCrop['new_image']     = './uploads/crops/';
+                $configCrop['new_image']     = realpath(APPPATH . '../uploads/crop/');
                 $configCrop['maintain_ratio']= FALSE;
                 $configCrop['quality']       = 100;
                 $configCrop['width']         = $tamanhos['wcrop'];
@@ -82,5 +83,30 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  
         // Retorna os valores a serem utilizados no processo de recorte da imagem
         return $dimensoes;
+    }
+    
+    private function Validar($operacao = 'insert'){
+        switch($operacao)
+        {
+            case 'insert':
+            	$rules['usuario_fk'] = array('trim', 'required');
+            	$rules['post_titulo'] = array('trim', 'required', 'min_length[3]', 'max_length[100]','is_unique[posts.post_titulo]');
+            	$rules['post_conteudo'] = array('trim', 'required', 'min_length[3]');
+            break;
+		case 'update':
+                    $rules['usuario_fk'] = array('trim', 'required');
+                    $rules['post_titulo'] = array('trim', 'required', 'min_length[3]', 'max_length[100]');
+                    $rules['post_conteudo'] = array('trim', 'required', 'min_length[3]');
+            break;
+            default:
+		$rules['usuario_fk'] = array('trim', 'required');
+            	$rules['post_titulo'] = array('trim', 'required', 'min_length[3]', 'max_length[100]','is_unique[posts.post_titulo]');
+            	$rules['post_conteudo'] = array('trim', 'required', 'min_length[3]');
+            break;
+	}
+	$this->form_validation->set_rules('usuario_fk', 'Autor', $rules['usuario_fk']);
+	$this->form_validation->set_rules('post_titulo', 'Titulo', $rules['post_titulo']);
+	$this->form_validation->set_rules('post_conteudo', 'Conteudo', $rules['post_conteudo']);
+	return $this->form_validation->run();
     }
 }

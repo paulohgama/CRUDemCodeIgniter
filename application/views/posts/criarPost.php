@@ -22,15 +22,15 @@ $(document).ready( function (){
             else {
                 Reset();
             }
-            $("#titulo").html(option).show();
+            $("#pessoa").html(option).show();
         });
         function Reset()
         {
-            $("titulo").empty().append('<option>Carregando Autores</option>');
+            $("pessoa").empty().append('<option>Carregando Autores</option>');
         }
 });
 </script>
-<form class="form-horizontal" action="posts/salvar" enctype="multipart/form-data">
+<form class="form-horizontal" method="GET" action="<?= base_url('posts/salvar')?>" enctype="multipart/form-data">
 <div class="form-group">
     <label class="control-label col-sm-2" for="pessoa">Autor:</label>
     <div class="col-sm-10">
@@ -48,7 +48,7 @@ $(document).ready( function (){
 <div class="form-group">
         <label class="control-label col-sm-2" for="foto">Foto do Post:</label>
         <div class="col-sm-10">
-            <input type="file" class="form-control" name="post_foto" id="seleciona-imagem" placeholder="Foto"/>
+            <input type="file" class="form-control" name="post_foto" id="seleciona-imagem"/>
         </div>
 </div>
     <div class="form-group">
@@ -65,11 +65,6 @@ $(document).ready( function (){
         </textarea>
     </div>
 </div>
-<div class="form-group"> 
-    <div class="col-sm-offset-2 col-sm-10">
-      <button type="submit" class="btn btn-default">Cadastrar</button>
-    </div>  
-</div>
 <input type="hidden" id="x" name="x" />
 <input type="hidden" id="y" name="y" />
 <input type="hidden" id="wcrop" name="wcrop" />
@@ -78,5 +73,23 @@ $(document).ready( function (){
 <input type="hidden" id="hvisualizacao" name="hvisualizacao" />
 <input type="hidden" id="woriginal" name="woriginal" />
 <input type="hidden" id="horiginal" name="horiginal" />
+<div class="form-group"> 
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-default">Cadastrar</button>
+    </div>  
+</div>
+
 
 </form>
+<?php if ($this->session->flashdata('error') == TRUE): ?>
+    <div class="alert alert-danger alert-dismissible">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong><?php echo $this->session->flashdata('error'); ?></strong>
+    </div>
+<?php endif; ?>
+<?php if ($this->session->flashdata('success') == TRUE): ?>
+	<div class="alert alert-success alert-dismissible">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong><?php echo $this->session->flashdata('success'); ?></strong>
+    </div>
+<?php endif;?>

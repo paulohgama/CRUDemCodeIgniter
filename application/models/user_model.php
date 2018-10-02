@@ -35,7 +35,7 @@ class user_model extends MY_Model
         $this->db->join('categorias', 'categoria_fk = categoria_id');
         $this->db->where('usuario_id', $id);
         $query = $this->db->get();
-        return $query->result();
+        return $query->row_array();
     }
     
     function criar_query()

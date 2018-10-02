@@ -2,76 +2,90 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
     class Posts extends CI_Controller {
     
-        public function Criar()
-        {
+        public function Criar() {
         
              $this->template->load('template','posts/criarPost');
         }
-        public function Usuario()
-        {
+        
+        public function Usuario() {
             $dados = $this->posts_model->GetUsuario();
             echo json_encode($dados);
         
         }
-        public function RecortarSalvar(){
-        $validacao = self::Validar();
-        if($validacao)
-        {   
-            $post = $this->input->post();
-            $configUpload['upload_path']   = realpath(APPPATH . '../uploads/images/');
+        
+        public function Recortar(){
+            $configUpload['upload_path']   = './assets/uploads/images';
             $configUpload['allowed_types'] = 'jpg|png';
             $configUpload['encrypt_name']  = TRUE;
+ 
             $this->upload->initialize($configUpload);
-            //return var_dump( $configUpload['upload_path']);
+ 
             if ( ! $this->upload->do_upload('post_foto'))
             {
                 $data= array('error' => $this->upload->display_errors());
-                $this->template->load('template','posts/criarPost',$data);
             }
             else
             {
                 $dadosImagem = $this->upload->data();
                 $tamanhos = $this->CalculaPercetual($this->input->post());
+ 
                 $configCrop['image_library'] = 'gd2';
                 $configCrop['source_image']  = $dadosImagem['full_path'];
-                $configCrop['new_image']     = realpath(APPPATH . '../uploads/crop/');
+                $configCrop['new_image']     = './assets/uploads/crop/';
                 $configCrop['maintain_ratio']= FALSE;
-                $configCrop['quality']       = 100;
+                $configCrop['quality']             = 100;
                 $configCrop['width']         = $tamanhos['wcrop'];
                 $configCrop['height']        = $tamanhos['hcrop'];
                 $configCrop['x_axis']        = $tamanhos['x'];
                 $configCrop['y_axis']        = $tamanhos['y'];
+ 
                 $this->image_lib->initialize($configCrop);
+ 
                 if ( ! $this->image_lib->crop())
                 {
                     $data = array('error' => $this->image_lib->display_errors());
-                    $this->template->load('template','posts/criarPost',$data);            }
+                }
                 else
                 {
-                    $urlImagem = base_url('uploads/crops/'.$dadosImagem['file_name']);
-                    $post->post_foto = $urlImagem;
-                    $status = $this->user_model->Inserir($post);
-                    if(!$status)
-                    {   
-                        $this->session->set_flashdata('error', 'Não foi possível postar.');
-                    }
-                    else
-                    {
-                        $this->session->set_flashdata('success', 'Postado com sucesso.');
-                        $this->template->load('template', 'posts/criarPost');
-                    }
-                    $this->template->load('template','posts/criarPost');
+                    $urlImagem = base_url('assets/uploads/crop/'.$dadosImagem['file_name']);
+                    unlink($dadosImagem['full_path']);
+                    $this->Salvar($this->input->post(), $urlImagem);
                 }
             }
         }
-        else 
-        {
-            $this->session->set_flashdata('error', validation_errors('<p>','</p>'));
-            $this->template->load('template', 'posts/criarPost');
+        
+        public function Salvar($posts, $urlImagem) {
+            $validacao = self::Validar();
+            if($validacao)
+            {
+                $usuario = [
+                    'post_titulo' => $posts['post_titulo'],
+                    'post_foto' => $urlImagem,
+                    'post_conteudo' => $posts['post_conteudo'],
+                    'usuario_fk' => $posts['usuario_fk']
+                ];
+                $status = $this->posts_model->Inserir($usuario);
+                if(!$status)
+                {
+                    $this->session->set_flashdata('error', 'Não foi possível Postar.');
+                    $this->template->load('template', 'home');
+
+                }
+                else
+                {
+                    $this->session->set_flashdata('success', 'Postado com sucesso.');
+                    $this->template->load('template', 'home');
+                }
+            }
+            else
+            {
+                $this->session->set_flashdata('error', validation_errors('<p>','</p>'));
+                $this->template->load('template', 'home');
+            }
+            
         }
-    }
- 
-    private function CalculaPercetual($dimensoes){
+
+        private function CalculaPercetual($dimensoes){
         if($dimensoes['woriginal'] > $dimensoes['wvisualizacao']){
             $percentual = $dimensoes['woriginal'] / $dimensoes['wvisualizacao'];
  
@@ -85,7 +99,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         return $dimensoes;
     }
     
-    private function Validar($operacao = 'insert'){
+        private function Validar($operacao = 'insert'){
         switch($operacao)
         {
             case 'insert':
@@ -109,4 +123,31 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	$this->form_validation->set_rules('post_conteudo', 'Conteudo', $rules['post_conteudo']);
 	return $this->form_validation->run();
     }
+    
+        public function ListarPosts() {
+            $this->template->load('template', 'posts/listarPosts');
+        }
+        
+        public function PegaDados(){
+            $pegadados = $this->posts_model->criar_datatable();
+            $dados = array();
+            foreach ($pegadados as $row) {
+                $sub_dados = array();
+                $sub_dados[] = $row->usuario_nome;
+                $sub_dados[] = $row->post_titulo;
+                $sub_dados[] = "<img src='".$row->post_foto."' style='height:100px;width:100px;'/>";
+                $sub_dados[] = $row->post_conteudo;
+                //$sub_dados[] = "<a href='".base_url('subcategoria/editar')."/".$row->subcategoria_id."' role='button' class='btn btn-success'>Editar</a>";
+                //$sub_dados[] = "<a href='".base_url('subcategoria/excluir')."/".$row->subcategoria_id."' role='button' class='btn btn-danger'>Excluir</a>";
+                $dados[] = $sub_dados;
+            }
+
+            $output = array (
+                "draw"  => intval($_POST["draw"]),
+                "recordsTotal" => $this->posts_model->getAllData(), 
+                "recordsFiltered" => $this->posts_model->getFilteredData(),
+                "data" => $dados
+            );
+            echo json_encode($output);
+        }
 }

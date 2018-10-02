@@ -33,6 +33,6 @@ $route['subcategoria/excluir/(:num)'] = "Subcategoria/Excluir/$1";
 
 $route['posts/criarpost'] = 'Posts/Criar';
 $route['posts/usuario'] = 'Posts/Usuario';
-$route['posts/salvar'] = 'Posts/RecortarSalvar';
-$route['posts/meusposts'] = 'Posts/Meus';
-$route['posts/todosposts'] = 'Posts/Todos';
+$route['posts/pega_dados'] = 'Posts/PegaDados';
+$route['posts/recortar'] = 'Posts/Recortar';
+$route['posts/listarposts'] = 'Posts/ListarPosts';

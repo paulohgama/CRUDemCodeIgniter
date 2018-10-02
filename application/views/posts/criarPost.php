@@ -18,19 +18,12 @@ $(document).ready( function (){
                     option += "<option value='"+obj.usuario_id+"'>"+
                         obj.usuario_nome+"</option>";
                 });
+                $("#pessoa").html(option).show();
             }
-            else {
-                Reset();
-            }
-            $("#pessoa").html(option).show();
         });
-        function Reset()
-        {
-            $("pessoa").empty().append('<option>Carregando Autores</option>');
-        }
 });
 </script>
-<form class="form-horizontal" method="GET" action="<?= base_url('posts/salvar')?>" enctype="multipart/form-data">
+<form class="form-horizontal" method="POST" action="<?= base_url('posts/recortar')?>" enctype="multipart/form-data">
 <div class="form-group">
     <label class="control-label col-sm-2" for="pessoa">Autor:</label>
     <div class="col-sm-10">

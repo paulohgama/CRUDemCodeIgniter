@@ -2,17 +2,15 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Usuario extends CI_Controller 
 {
-    public function Mostrar()
-    {
+    public function Mostrar(){
         $this->template->load('template', 'usuarios/listagem');
     }
 
-        public function Cadastro()
-    {
+    public function Cadastro(){
         $this->template->load('template', 'usuarios/form-cadastro');
     }
-    public function PegaDados()
-    {
+    
+    public function PegaDados(){
         $pegadados = $this->user_model->criar_datatable();
         $dados = array();
         foreach ($pegadados as $row) {
@@ -37,23 +35,20 @@ class Usuario extends CI_Controller
         echo json_encode($output);
     }
     
-    public function Subcategoria()
-    {
+    public function Subcategoria(){
         $id = $this->uri->segment(3);
         $dados = $this->user_model->GetSub($id);
         echo json_encode($dados);
         
     }
     
-    public function Categoria()
-    {
+    public function Categoria(){
         $dados = $this->user_model->GetCategoria();
         echo json_encode($dados);
         
     }
     
-    public function Salvar()
-    {
+    public function Salvar(){
         $validacao = self::Validar();
 	if($validacao)
         {
@@ -73,17 +68,19 @@ class Usuario extends CI_Controller
         else
         {
             $this->session->set_flashdata('error', validation_errors('<p>','</p>'));
+            $this->template->load('template', 'usuarios/listagem');
         }
-        $this->template->load('template', 'usuarios/listagem');
+
     }
+    
     public function Editar(){
 	$id = $this->uri->segment(3);
 	if (is_null($id)) 
         {
             $this->template->load('template', 'usuarios/listagem');
         }
-        $dados['usuario'] = $this->user_model->GetByIdJoin($id,'usuario');
-        $this->template->load('template', 'usuarios/form-cadastro', $dados);
+        $dados['usuario'] = $this->user_model->GetByIdJoin($id);
+        $this->template->load('template', 'usuarios/form-alteracao', $dados);
     }
     
     public function Atualizar(){
@@ -106,13 +103,15 @@ class Usuario extends CI_Controller
 	}
     }
     
+    
+    
     public function Excluir(){
         $id = $this->uri->segment(3);
 	if (is_null($id)) 
         {
             redirect();
         }
-        $status = $this->user_model->Excluir($id, 'usuario');
+            $status = $this->user_model->Excluir($id, 'usuario');
 	if($status)
         {
             $this->session->set_flashdata('success', 'Usuario excluído com sucesso.');
@@ -147,9 +146,9 @@ class Usuario extends CI_Controller
             	$rules['subcategoria_fk'] = array('trim', 'required');
         }
         $this->form_validation->set_rules('usuario_nome', 'Usuario', $rules['usuario_nome']);
-	$this->form_validation->set_rules('usuario_email', 'Usuario', $rules['usuario_email']);
-	$this->form_validation->set_rules('usuario_data', 'Usuario', $rules['usuario_data']);
-	$this->form_validation->set_rules('subcategoria_fk', 'Usuario', $rules['subcategoria_fk']);
+	$this->form_validation->set_rules('usuario_email', 'E-mail', $rules['usuario_email']);
+	$this->form_validation->set_rules('usuario_data', 'Data', $rules['usuario_data']);
+	$this->form_validation->set_rules('subcategoria_fk', 'Subcategoria', $rules['subcategoria_fk']);
 	return $this->form_validation->run();
     }
     

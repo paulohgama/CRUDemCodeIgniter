@@ -86,10 +86,8 @@ class MY_Model extends CI_Model
         {
             return false;
         }
-        $this->db->where($tabela.'_id', $id);
-        try{$this->db->delete($this->table);}
-        catch (Exception $ex) {$error = $this->db->error(); }
-        if(empty($error))
+        $this->db->where($tabela.'_id', $id);     
+        if($this->db->delete($this->table))
         {
             return true;
         }

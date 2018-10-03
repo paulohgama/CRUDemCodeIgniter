@@ -11,6 +11,18 @@ class user_model extends MY_Model
         $this->table = 'usuarios';
     }
     
+    function GetByEmail($email)
+    {
+        $this->db->select("*");
+        $this->db->from($this->table);
+        $this->db->join('subcategorias', 'subcategoria_fk = subcategoria_id');
+        $this->db->join('categorias', 'categoria_fk = categoria_id');
+        $this->db->where('usuario_email', $email);
+        $query = $this->db->get();
+        return $query->row_array();
+
+    }
+            
     function GetSub($id)
     {
         $this->db->select("*");

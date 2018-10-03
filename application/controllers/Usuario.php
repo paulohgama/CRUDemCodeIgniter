@@ -1,7 +1,11 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-class Usuario extends CI_Controller 
+class Usuario extends CI_Controller
 {
+    public function __construct() {
+        parent::__construct();
+    }
+
     public function Mostrar(){
         $this->template->load('template', 'usuarios/listagem');
     }
@@ -61,8 +65,9 @@ class Usuario extends CI_Controller
             else
             {
                 $this->session->set_flashdata('success', 'Usuario inserido com sucesso.');
-		$this->template->load('template', 'usuarios/listagem');
-
+                $dados = $this->user_model->GetByEmail($usuario['usuario_email']);
+                $this->EnviarEmailUsuario($dados['usuario_email'], $dados['usuario_nome'], $dados['categoria_nome'], $dados['subcategoria_nome'], $dados['usuario_data'], 'O cadastro');
+                $this->template->load('template', 'usuarios/listagem');
             }
         }
         else
@@ -70,7 +75,7 @@ class Usuario extends CI_Controller
             $this->session->set_flashdata('error', validation_errors('<p>','</p>'));
             $this->template->load('template', 'usuarios/listagem');
         }
-
+        
     }
     
     public function Editar(){
@@ -102,8 +107,6 @@ class Usuario extends CI_Controller
             $this->template->load('template', 'usuarios/form-cadastro', $dados);
 	}
     }
-    
-    
     
     public function Excluir(){
         $id = $this->uri->segment(3);
@@ -152,6 +155,32 @@ class Usuario extends CI_Controller
 	return $this->form_validation->run();
     }
     
+    public function EnviarEmailUsuario($email, $nome, $categoria, $subcategoria, $data, $tipo) {
+        $config['protocol'] = 'smtp';
+        $config['validate'] = TRUE;
+        $config['mailtype'] = 'html';
+        $config['smtp_host'] = 'smtplw.com.br';
+        $config['smtp_user'] = 'kbrtec12';
+        $config['smtp_pass'] = 'qoCLMtEf6185';
+        $config['smtp_port'] = '587';
+        $config['smtp_crypto'] = 'tls';
+        $this->email->initialize($config);
+        $this->email->from('smtp@kbrtec.com.br', 'KBRTEC-TESTES');
+        $this->email->to($email, $nome);
+        $this->email->subject($tipo. 'foi um sucesso, segue seus dados');
+        $dados = [
+                'nome' => $nome
+            ,   'email' => $email
+            ,   'data' => $data
+            ,   'categoria' => $categoria
+            ,   'subcategoria' => $subcategoria
+        ];
+        $this->email->message($this->load->view('usuarios/email',$dados, TRUE));
+        //anexo
+        //$this->email->attach('./assets/images/unici/logo.png');
+        return $this->email->send();
+
+    }
 }
 
 

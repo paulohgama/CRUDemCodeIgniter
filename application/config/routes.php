@@ -40,3 +40,5 @@ $route['posts/alterar'] = 'Posts/Atualizar';
 $route['posts/editar/(:num)'] = 'Posts/Editar/$1s';
 $route['posts/excluir/(:num)'] = 'Posts/Excluir/$1';
 $route['posts/ver/(:num)'] = 'Posts/Ver/$1';
+
+$route['enviarEmail/usuario'] = 'Email/EnviarEmailUsuario';

@@ -13,11 +13,48 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         
         }
         
+        public function Atualizar(){
+            if($this->input->post('post_foto') === "")
+            {
+                $urlImagem = $this->input->post('post_foto_antiga');
+            }
+            else 
+            {
+                $urlImagem = $this->Recortar();
+                unlink(substr($this->input->post('post_foto_antiga'),35));
+                
+            }
+            $validacao = self::Validar('update');
+            $post[] = [
+               'usuario_fk' => $this->input->post('usuario_fk'), 
+               'post_titulo' => $this->input->post('post_titulo'), 
+               'post_conteudo' => $this->input->post('post_titulo'), 
+               'post_foto' => $urlImagem
+            ];
+            $id = intval($this->input->post('post_id'));
+            if($validacao){
+                $status = $this->posts_model->Atualizar($id, $post[0], 'post');
+                if(!$status){
+                    $dados['post'] = $this->posts_model->GetIdJoin($id, 'post');
+                    $this->session->set_flashdata('error', 'Não foi possível atualizar o Post.');
+                    $this->template->load('template', 'posts/form-alteracao', $dados);
+                }else{
+                    $this->session->set_flashdata('success', 'Post atualizado com sucesso.');
+                    redirect(base_url('posts'));
+                }
+            }else{
+                $dados['post'] = $this->posts_model->GetIdJoin($id, 'post');
+                $this->session->set_flashdata('error', validation_errors());
+                $this->template->load('template', 'posts/form-alteracao', $dados);
+            }
+        }
+
+
         public function Recortar(){
             $configUpload['upload_path']   = './assets/uploads/images';
             $configUpload['allowed_types'] = 'jpg|png';
             $configUpload['encrypt_name']  = TRUE;
- 
+            
             $this->upload->initialize($configUpload);
  
             if ( ! $this->upload->do_upload('post_foto'))
@@ -49,18 +86,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 {
                     $urlImagem = base_url('assets/uploads/crop/'.$dadosImagem['file_name']);
                     unlink($dadosImagem['full_path']);
-                    $this->Salvar($this->input->post(), $urlImagem);
+                    return $urlImagem;
                 }
             }
+            
         }
         
-        public function Salvar($posts, $urlImagem) {
+        public function Salvar() {
             $validacao = self::Validar();
+            $posts = $this->input->post();
             if($validacao)
             {
                 $usuario = [
                     'post_titulo' => $posts['post_titulo'],
-                    'post_foto' => $urlImagem,
+                    'post_foto' => $this->Recortar(),
                     'post_conteudo' => $posts['post_conteudo'],
                     'usuario_fk' => $posts['usuario_fk']
                 ];
@@ -112,11 +151,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     $rules['post_titulo'] = array('trim', 'required', 'min_length[3]', 'max_length[100]');
                     $rules['post_conteudo'] = array('trim', 'required', 'min_length[3]');
             break;
-            default:
-		$rules['usuario_fk'] = array('trim', 'required');
-            	$rules['post_titulo'] = array('trim', 'required', 'min_length[3]', 'max_length[100]','is_unique[posts.post_titulo]');
-            	$rules['post_conteudo'] = array('trim', 'required', 'min_length[3]');
-            break;
 	}
 	$this->form_validation->set_rules('usuario_fk', 'Autor', $rules['usuario_fk']);
 	$this->form_validation->set_rules('post_titulo', 'Titulo', $rules['post_titulo']);
@@ -137,8 +171,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 $sub_dados[] = $row->post_titulo;
                 $sub_dados[] = "<img src='".$row->post_foto."' style='height:100px;width:100px;'/>";
                 $sub_dados[] = $row->post_conteudo;
-                //$sub_dados[] = "<a href='".base_url('subcategoria/editar')."/".$row->subcategoria_id."' role='button' class='btn btn-success'>Editar</a>";
-                //$sub_dados[] = "<a href='".base_url('subcategoria/excluir')."/".$row->subcategoria_id."' role='button' class='btn btn-danger'>Excluir</a>";
+                $sub_dados[] = "<a href='".base_url('posts/editar')."/".$row->post_id."' role='button' class='btn btn-success'>Editar</a>";
+                $sub_dados[] = "<a href='".base_url('posts/excluir')."/".$row->post_id."' role='button' class='btn btn-danger'>Excluir</a>";
+                $sub_dados[] = "<a href='".base_url('posts/ver')."/".$row->post_id."' role='button' class='btn btn-primary'>Ver</a>";
                 $dados[] = $sub_dados;
             }
 
@@ -149,5 +184,34 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 "data" => $dados
             );
             echo json_encode($output);
+        }
+        
+        public function Editar() {
+            $id = $this->uri->segment(3);
+            $dados['post'] = $this->posts_model->GetIdJoin($id);
+            $this->template->load('template', 'posts/form-alteracao', $dados);
+        }
+        
+        public function Excluir() {
+            $id = $this->uri->segment(3);
+            $status = $this->posts_model->Excluir($id, 'post');
+            if($status)
+            {
+                $this->session->set_flashdata('success', 'Post excluída com sucesso.');
+                redirect(base_url('posts'));
+            }
+            else
+            {
+                $this->session->set_flashdata('error', 'Não foi possível excluir o Post.');
+                redirect(base_url('posts'));
+            }
+        }
+        
+        public function Ver() {
+            $id = $this->uri->segment(3);
+            $post['post'] = $this->posts_model->GetIdJoin($id);
+            //return var_dump($post);
+            $this->template->load('template', 'posts/ver-post', $post);
+
         }
 }

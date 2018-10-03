@@ -80,21 +80,22 @@ class MY_Model extends CI_Model
     *
     * @return boolean
     */
-    function Excluir($id, $tabela) 
+    function Excluir($ide, $tabela) 
     {
+        $id = intval($ide);
         if (is_null($id)) 
         {
             return false;
         }
-        $this->db->where($tabela.'_id', $id);     
-        if($this->db->delete($this->table))
+        if($tabela == 'post')
         {
-            return true;
+            $this->db->where($tabela.'_id', $id);
+            $this->db->from($this->table);
+            $query = $this->db->get()->result_array();
+            unlink(substr($query[0]['post_foto'],35));
         }
-        else
-        {
-            return false;
-        }
+        $this->db->where($tabela.'_id', $id);
+        return $this->db->delete($this->table);
     }
 }
     /* End of file */

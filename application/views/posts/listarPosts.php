@@ -13,7 +13,7 @@ $(document).ready(function(){
            },
            "columnsDefs": [
                 {
-                    "target": [3, 4],
+                    "target": [2, 3, 4, 5, 6],
                     "orderable":false
                 }
            ],
@@ -44,12 +44,18 @@ $(document).ready(function(){
             <th>Titulo</th>
             <th>Imagem</th>
             <th>Conteudo</th>
+            <th>Editar</th>
+            <th>Excluir</th>
+            <th>Ver</th>
         </tr>
     </thead>
     <tbody>
         
     </tbody>
     <tfoot>
+        <th></th>
+        <th></th>
+        <th></th>
         <th></th>
         <th></th>
         <th></th>

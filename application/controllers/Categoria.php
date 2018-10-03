@@ -11,8 +11,7 @@ class Categoria extends CI_Controller
         $this->template->load('template', 'categoria/listagem');
     }
     
-    public function PegaDados()
-    {
+    public function PegaDados() {
         $pegadados = $this->categoria_model->criar_datatable();
         $dados = array();
         foreach ($pegadados as $row) {

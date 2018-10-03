@@ -23,9 +23,6 @@ $(document).ready(function(){
                         obj.categoria_nome+"</option>";
                 });
             }
-            else {
-                Reset();
-            }
             $("#categoria").html(option).show();
         });
     

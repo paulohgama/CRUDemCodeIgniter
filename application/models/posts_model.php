@@ -3,16 +3,14 @@
 class posts_model extends MY_Model{
     
     var $select_columns = array ("post_id","usuario_nome" ,"post_titulo", "post_foto", "post_conteudo");
-    var $order_columns = array ("usuario_nome", "post_titulo", null, "post_conteudo");
+    var $order_columns = array ("usuario_nome", "post_titulo", null, null, null, null, null);
     
-    function __construct() 
-    {
+    function __construct() {
         parent::__construct();
         $this->table = 'posts';
     }
        
-    function criar_query()
-    {
+    function criar_query() {
         $this->db->select($this->select_columns);
         $this->db->from($this->table);
         $this->db->join('usuarios', 'usuarios.usuario_id = posts.usuario_fk');
@@ -33,8 +31,7 @@ class posts_model extends MY_Model{
         }
     }
     
-    function criar_datatable()
-    {
+    function criar_datatable() {
         $this->criar_query();
         if($_POST["length"] != -1)
         {
@@ -44,25 +41,32 @@ class posts_model extends MY_Model{
         return $query->result();
     }
     
-    function getFilteredData()
-    {
+    function getFilteredData() {
         $this->criar_query();
         $query = $this->db->get();
         return $query->num_rows();
     }
         
-    function getAllData()
-    {
+    function getAllData() {
         $this->db->select("*");
         $this->db->from($this->table);
         return $this->db->count_all_results();
     }
      
-    function GetUsuario()
-    {
+    function GetUsuario() {
         $this->db->select("*");
         $this->db->from('usuarios');
         $query = $this->db->get();
         return $query->result();
+    }
+    
+    function GetIdJoin($id)
+    {
+        $this->db->select("*");
+        $this->db->from($this->table);
+        $this->db->join('usuarios', 'usuarios.usuario_id = posts.usuario_fk');
+        $this->db->where('post_id', $id);
+        $query = $this->db->get();
+        return $query->result_array();
     }
 }

@@ -39,7 +39,7 @@
                                 <ul class="sub-menu collapse" id="posts">
                                     <!-- class="active" no li -->
                                     <li><a href="<?=base_url().'posts/criarpost'?>" id="formCadastro">Criar Post</a></li>
-                                    <li><a href="<?=base_url().'posts/listarposts'?>">Listar Posts</a></li>
+                                    <li><a href="<?=base_url().'posts'?>">Listar Posts</a></li>
                                 </ul>
                                 <li data-toggle="collapse" data-target="#categorias" class="collapsed">
                                   <a href="#"><i class="fa fa-bars fa-lg"></i> Categorias <span class="arrow"></span></a>

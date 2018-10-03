@@ -23,7 +23,7 @@ $(document).ready( function (){
         });
 });
 </script>
-<form class="form-horizontal" method="POST" action="<?= base_url('posts/recortar')?>" enctype="multipart/form-data">
+<form class="form-horizontal" method="POST" action="<?= base_url('posts/salvar')?>" enctype="multipart/form-data">
 <div class="form-group">
     <label class="control-label col-sm-2" for="pessoa">Autor:</label>
     <div class="col-sm-10">

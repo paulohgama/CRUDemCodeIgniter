@@ -13,9 +13,11 @@ $(document).ready(function(){
                 "style": "width: 600px;"
             }).appendTo(image_holder);
             image.Jcrop({
-              aspectRatio: 1,
-              onSelect: atualizaCoordenadas,
-              onChange: atualizaCoordenadas
+                onChange: atualizaCoordenadas,
+                onSelect: atualizaCoordenadas,
+                aspectRatio: 1
+              
+              
             });
             defineTamanhoImagem(e.target.result, image);
         }

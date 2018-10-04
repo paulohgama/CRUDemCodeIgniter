@@ -1,5 +1,9 @@
 <script src="<?=base_url('assets/js/scripts.js')?>" type="text/javascript"></script>
-<script src="<?=base_url('assets/js/jquery.Jcrop.js')?>"></script>
+<script src="<?=base_url('assets/jcrop/js/jquery.Jcrop.js')?>"></script>
+<script src="<?=base_url('assets/jcrop/js/jquery.Jcrop.min.js')?>"></script>
+<script src="<?=base_url('assets/jcrop/js/jquery.color.js')?>"></script>
+<link href="<?=base_url('assets/jcrop/css/jquery.Jcrop.css')?>" rel="stylesheet" type="text/css"/>
+<link href="<?=base_url('assets/jcrop/css/jquery.Jcrop.min.css')?>" rel="stylesheet" type="text/css"/>
 <script src="<?=base_url('assets/ckeditor/ckeditor.js')?>"></script>
 <script type="text/javascript">
 $(document).ready( function (){

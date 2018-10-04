@@ -60,13 +60,21 @@ class posts_model extends MY_Model{
         return $query->result();
     }
     
-    function GetIdJoin($id)
-    {
+    function GetIdJoin($id) {
         $this->db->select("*");
         $this->db->from($this->table);
         $this->db->join('usuarios', 'usuarios.usuario_id = posts.usuario_fk');
         $this->db->where('post_id', $id);
         $query = $this->db->get();
         return $query->result_array();
+    }
+    
+    function GetByTitulo($titulo) {
+        $this->db->select("*");
+        $this->db->from($this->table);
+        $this->db->join('usuarios', 'usuarios.usuario_id = posts.usuario_fk');
+        $this->db->where('post_titulo', $titulo);
+        $query = $this->db->get();
+        return $query->row_array();
     }
 }

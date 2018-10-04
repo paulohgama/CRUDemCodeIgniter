@@ -21,8 +21,8 @@ class Subcategoria extends CI_Controller
             $sub_dados[] = $row->subcategoria_id;
             $sub_dados[] = $row->subcategoria_nome;
             $sub_dados[] = $row->categoria_nome;
-            $sub_dados[] = "<a href='".base_url('subcategoria/editar')."/".$row->subcategoria_id."' role='button' class='btn btn-success'>Editar</a>";
-            $sub_dados[] = "<a href='".base_url('subcategoria/excluir')."/".$row->subcategoria_id."' role='button' class='btn btn-danger'>Excluir</a>";
+            $sub_dados[] = "<a href='".base_url('subcategoria/editar')."/".$row->subcategoria_id."' role='button' class='btn btn-success'><span class='glyphicon glyphicon-edit'></span></a>";
+            $sub_dados[] = "<a href='".base_url('subcategoria/excluir')."/".$row->subcategoria_id."' role='button' class='btn btn-danger'><span class='glyphicon glyphicon-trash'></span></a>";
             $dados[] = $sub_dados;
         }
         

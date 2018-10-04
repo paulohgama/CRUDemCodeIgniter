@@ -56,7 +56,7 @@
                                     <li><a href="<?=base_url().'subcategoria'?>">Listar Subcategorias</a></li>
                                 </ul>
                                  <li>
-                                  <a href="#"><i class="fa fa-info-circle fa-lg"></i> Sobre</a>
+                                  <a href="#" data-toggle="modal" data-target="#myModal"><i class="fa fa-info-circle fa-lg"></i> Sobre</a>
                                   </li>
                             </ul>
                         </div>
@@ -66,6 +66,23 @@
                 <div style="margin-top: 10px; margin-left: 300px; margin-bottom: 10px">
                     <?php echo $contents; ?>
                 </div>
-        </div>    
+        </div>
+<div class="modal fade" id="myModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">CRUD EM CODIGNITER</h4>
+      </div>
+      <div class="modal-body">
+        Paulo Henrique Silva dos Santos
+      </div>
+      <div class="modal-footer">
+        <b>KBRTEC</b>
+      </div>
+
+    </div>
+  </div>
+</div>    
     </body>
 </html>

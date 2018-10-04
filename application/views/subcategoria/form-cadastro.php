@@ -35,9 +35,9 @@
   <div class="form-group"> 
         <input type="hidden" name="subcategoria_id" value="<?=$subcategoria['subcategoria_id']?>">
         <?php if($subcategoria['subcategoria_id'] === (string) ''): ?>
-            <button type="submit" class="btn btn-success">Cadastrar</button>
+        <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-floppy-disk"></span> Cadastrar</button>
         <?php else: ?>
-            <button type="submit" class="btn btn-success">Atualizar</button>
+            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-refresh"></span> Atualizar</button>
         <?php endif; ?>
   </div>
 </form>

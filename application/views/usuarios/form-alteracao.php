@@ -102,7 +102,7 @@ $(document).ready(function(){
     <input type="hidden" name="usuario_id" value="<?= $usuario['usuario_id'] ?>"/>
   <div class="form-group"> 
     <div class="col-sm-offset-2 col-sm-10">
-      <button type="submit" class="btn btn-primary">Atualizar</button>
+      <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-refresh"></span> Atualizar</button>
     </div>
   </div>
 </form>

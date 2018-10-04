@@ -1,6 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-    class Posts extends CI_Controller {
+    class Posts extends My_controller {
     
         public function Criar() {
         
@@ -14,41 +14,40 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         }
         
         public function Atualizar(){
-            if($this->input->post('post_foto') === "")
-            {
-                $urlImagem = $this->input->post('post_foto_antiga');
-            }
-            else 
-            {
-                $urlImagem = $this->Recortar();
-                unlink(substr($this->input->post('post_foto_antiga'),35));
-                
-            }
-            $validacao = self::Validar('update');
-            $post[] = [
-               'usuario_fk' => $this->input->post('usuario_fk'), 
-               'post_titulo' => $this->input->post('post_titulo'), 
-               'post_conteudo' => $this->input->post('post_titulo'), 
-               'post_foto' => $urlImagem
-            ];
-            $id = intval($this->input->post('post_id'));
-            if($validacao){
-                $status = $this->posts_model->Atualizar($id, $post[0], 'post');
-                if(!$status){
-                    $dados['post'] = $this->posts_model->GetIdJoin($id, 'post');
-                    $this->session->set_flashdata('error', 'Não foi possível atualizar o Post.');
-                    $this->template->load('template', 'posts/form-alteracao', $dados);
-                }else{
-                    $this->session->set_flashdata('success', 'Post atualizado com sucesso.');
-                    redirect(base_url('posts'));
+            $urlImagem = $this->Recortar();
+                if ($urlImagem != NULL) {
+                    unlink(substr($this->input->post('post_foto_antiga'), 35));
                 }
-            }else{
-                $dados['post'] = $this->posts_model->GetIdJoin($id, 'post');
-                $this->session->set_flashdata('error', validation_errors());
-                $this->template->load('template', 'posts/form-alteracao', $dados);
+                else 
+                {
+                    $urlImagem = $this->input->post("post_foto_antiga");
+                }
+            $validacao = self::Validar('update');
+                $post = [
+                   'usuario_fk' => $this->input->post('usuario_fk'), 
+                   'post_titulo' => $this->input->post('post_titulo'), 
+                   'post_conteudo' => $this->input->post('post_titulo'), 
+                   'post_foto' => $urlImagem
+                ];
+                $id = intval($this->input->post('post_id'));
+                if($validacao){
+                    $status = $this->posts_model->Atualizar($id, $post, 'post');
+                    if(!$status){
+                        $dados['post'] = $this->posts_model->GetIdJoin($id, 'post');
+                        $this->session->set_flashdata('error', 'Não foi possível atualizar o Post.');
+                        $this->template->load('template', 'posts/form-alteracao', $dados);
+                    }else{
+                        $this->session->set_flashdata('success', 'Post atualizado com sucesso.');
+                        $dados = $this->posts_model->GetByTitulo($post['post_titulo']);
+                        $this->EnviarEmailPosts($dados['usuario_nome'], $dados['usuario_email'], $dados['post_conteudo'], $dados['post_titulo'], $dados['post_foto'], 'Post atualizado com sucesso');
+                        redirect(base_url('posts'));
+                    }
+                }else{
+                    $dados['post'] = $this->posts_model->GetIdJoin($id, 'post');
+                    $this->session->set_flashdata('error', validation_errors());
+                    $this->template->load('template', 'posts/form-alteracao', $dados);
+                }
             }
-        }
-
 
         public function Recortar(){
             $configUpload['upload_path']   = './assets/uploads/images';
@@ -60,12 +59,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             if ( ! $this->upload->do_upload('post_foto'))
             {
                 $data= array('error' => $this->upload->display_errors());
+                return var_dump($data);
             }
             else
             {
                 $dadosImagem = $this->upload->data();
                 $tamanhos = $this->CalculaPercetual($this->input->post());
- 
                 $configCrop['image_library'] = 'gd2';
                 $configCrop['source_image']  = $dadosImagem['full_path'];
                 $configCrop['new_image']     = './assets/uploads/crop/';
@@ -81,6 +80,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 if ( ! $this->image_lib->crop())
                 {
                     $data = array('error' => $this->image_lib->display_errors());
+                    return var_dump($data);
                 }
                 else
                 {
@@ -97,13 +97,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             $posts = $this->input->post();
             if($validacao)
             {
-                $usuario = [
+                $post = [
                     'post_titulo' => $posts['post_titulo'],
                     'post_foto' => $this->Recortar(),
                     'post_conteudo' => $posts['post_conteudo'],
                     'usuario_fk' => $posts['usuario_fk']
                 ];
-                $status = $this->posts_model->Inserir($usuario);
+                $status = $this->posts_model->Inserir($post);
                 if(!$status)
                 {
                     $this->session->set_flashdata('error', 'Não foi possível Postar.');
@@ -113,6 +113,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 else
                 {
                     $this->session->set_flashdata('success', 'Postado com sucesso.');
+                    $dados = $this->posts_model->GetByTitulo($post['post_titulo']);
+                    $this->EnviarEmailPosts($dados['usuario_nome'], $dados['usuario_email'], $dados['post_conteudo'], $dados['post_titulo'], $dados['post_foto'], 'Postado com sucesso');
                     $this->template->load('template', 'home');
                 }
             }
@@ -171,9 +173,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 $sub_dados[] = $row->post_titulo;
                 $sub_dados[] = "<img src='".$row->post_foto."' style='height:100px;width:100px;'/>";
                 $sub_dados[] = $row->post_conteudo;
-                $sub_dados[] = "<a href='".base_url('posts/editar')."/".$row->post_id."' role='button' class='btn btn-success'>Editar</a>";
-                $sub_dados[] = "<a href='".base_url('posts/excluir')."/".$row->post_id."' role='button' class='btn btn-danger'>Excluir</a>";
-                $sub_dados[] = "<a href='".base_url('posts/ver')."/".$row->post_id."' role='button' class='btn btn-primary'>Ver</a>";
+                $sub_dados[] = "<a href='".base_url('posts/editar')."/".$row->post_id."' role='button' class='btn btn-success'><span class='glyphicon glyphicon-edit'></span></a>";
+                $sub_dados[] = "<a href='".base_url('posts/excluir')."/".$row->post_id."' role='button' class='btn btn-danger'><span class='glyphicon glyphicon-trash'></span></a>";
+                $sub_dados[] = "<a href='".base_url('posts/ver')."/".$row->post_id."' role='button' class='btn btn-primary'><span class='glyphicon glyphicon-eye-open'></span></a>";
                 $dados[] = $sub_dados;
             }
 
@@ -210,7 +212,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         public function Ver() {
             $id = $this->uri->segment(3);
             $post['post'] = $this->posts_model->GetIdJoin($id);
-            //return var_dump($post);
             $this->template->load('template', 'posts/ver-post', $post);
 
         }

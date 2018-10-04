@@ -18,8 +18,8 @@ class Categoria extends CI_Controller
             $sub_dados = array();
             $sub_dados[] = $row->categoria_id;
             $sub_dados[] = $row->categoria_nome;
-            $sub_dados[] = "<a href='".base_url('categoria/editar')."/".$row->categoria_id."' role='button' class='btn btn-success'>Editar</a>";
-            $sub_dados[] = "<a href='".base_url('categoria/excluir')."/".$row->categoria_id."' role='button' class='btn btn-danger'>Excluir</a>";
+            $sub_dados[] = "<a href='".base_url('categoria/editar')."/".$row->categoria_id."' role='button' class='btn btn-success'><span class='glyphicon glyphicon-edit'></span></a>";
+            $sub_dados[] = "<a href='".base_url('categoria/excluir')."/".$row->categoria_id."' role='button' class='btn btn-danger'><span class='glyphicon glyphicon-trash'></span></a>";
             $dados[] = $sub_dados;
         }
         

@@ -1,5 +1,9 @@
 <script src="<?=base_url('assets/js/scripts.js')?>" type="text/javascript"></script>
-<script src="<?=base_url('assets/js/jquery.Jcrop.js')?>"></script>
+<script src="<?=base_url('assets/jcrop/js/jquery.Jcrop.js')?>"></script>
+<script src="<?=base_url('assets/jcrop/js/jquery.Jcrop.min.js')?>"></script>
+<script src="<?=base_url('assets/jcrop/js/jquery.color.js')?>"></script>
+<link href="<?=base_url('assets/jcrop/css/jquery.Jcrop.css')?>" rel="stylesheet" type="text/css"/>
+<link href="<?=base_url('assets/jcrop/css/jquery.Jcrop.min.css')?>" rel="stylesheet" type="text/css"/>
 <script src="<?=base_url('assets/ckeditor/ckeditor.js')?>"></script>
 <script type="text/javascript">
 $(document).ready( function (){
@@ -68,7 +72,7 @@ $(document).ready( function (){
 <input type="hidden" id="horiginal" name="horiginal" />
 <div class="form-group"> 
     <div class="col-sm-offset-2 col-sm-10">
-      <button type="submit" class="btn btn-default">Cadastrar</button>
+      <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-disk"></span> Cadastrar</button>
     </div>  
 </div>
 

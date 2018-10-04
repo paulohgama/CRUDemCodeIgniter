@@ -89,7 +89,7 @@ $(document).ready(function(){
 
   <div class="form-group"> 
     <div class="col-sm-offset-2 col-sm-10">
-      <button type="submit" class="btn btn-default">Cadastrar</button>
+      <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-disk"></span> Cadastrar</button>
     </div>
   </div>
 </form>

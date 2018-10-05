@@ -32,6 +32,14 @@ class user_model extends MY_Model
         return $query->result();
     }
     
+    function GetSubAll()
+    {
+        $this->db->select("*");
+        $this->db->from("subcategorias");
+        $query = $this->db->get();
+        return $query->result();
+    }
+    
     function GetCategoria()
     {
         $this->db->select("*");
@@ -56,9 +64,13 @@ class user_model extends MY_Model
         $this->db->from($this->table);
         $this->db->join('subcategorias', 'subcategoria_fk = subcategoria_id');
         $this->db->join('categorias', 'categoria_fk = categoria_id');
+        if(isset($_POST['subcategoria']))
+        {
+            $this->db->where('subcategoria_id', $_POST['subcategoria']);
+        }
         if(isset($_POST["search"]["value"]))
         {
-            $this->db->like("usuario_id", $_POST["search"]["value"]);
+            $this->db->or_like("usuario_id", $_POST["search"]["value"]);
             $this->db->or_like("usuario_nome", $_POST["search"]["value"]);
             $this->db->or_like("usuario_email", $_POST["search"]["value"]);
             $this->db->or_like("usuario_data", $_POST["search"]["value"]);

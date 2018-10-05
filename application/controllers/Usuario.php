@@ -46,7 +46,13 @@ class Usuario extends My_controller
         
     }
     
-    public function Categoria(){
+    public function SubcategoriaAll()
+    {
+        $dados = $this->user_model->GetSubAll();
+        echo json_encode($dados);
+    }
+
+        public function Categoria(){
         $dados = $this->user_model->GetCategoria();
         echo json_encode($dados);
         

@@ -6,6 +6,7 @@
 $(document).ready(function(){
     $("#calendar").datepicker({
             altFormat: 'dd-mm-yy',
+            dataFormat: 'dd-mm-yy',
             changeMonth: true,
             changeYear: true,
             dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado','Domingo'],

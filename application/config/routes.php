@@ -8,6 +8,7 @@ $route['translate_uri_dashes'] = FALSE;
 $route['usuario'] = 'Usuario/Mostrar';
 $route['usuario/pega_dados'] = 'Usuario/PegaDados';
 $route['usuario/subcategoria/(:num)'] = 'Usuario/Subcategoria';
+$route['usuario/subcategoria/all'] = 'Usuario/SubcategoriaAll';
 $route['usuario/categoria'] = 'Usuario/Categoria';
 $route['usuario/cadastrar'] = 'Usuario/Cadastro';
 $route['usuario/salvar'] = 'Usuario/Salvar';

@@ -3,6 +3,7 @@
 <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript"> 
     $(document).ready(function (){
+        carregar();
         $.getJSON("<?= base_url().'usuario/subcategoria/all'?>", function(dados){
             var option = "<option value=''>Subcategoria</option>"; 
             if (dados.length > 0){
@@ -13,52 +14,60 @@
             }
             $("#subcategoriaSearch").html(option).show();
         });
-        loaddata();
-        $('#subcategoriaSearch').change(function(){
-            var subcategoria = $('#subcategoriaSearch').val();
-            $('#tabelaUsuario').DataTable().destroy();
-            if(subcategoria != '')
-            {
-                loaddata(subcategoria);
+        $.getJSON("<?= base_url().'usuario/categoria'?>", function(dados){
+            var option = "<option value=''>Categoria</option>"; 
+            if (dados.length > 0){
+                $.each(dados, function(i, obj){
+                    option += "<option value='"+obj.categoria_id+"'>"+
+                        obj.categoria_nome+'</option>';
+                });
             }
-            else
-            {
-                loaddata();
-            }
+            $("#categoriaSearch").html(option).show();
         });
-        
-        function loaddata(subcategoria) {
+        $('#subcategoriaSearch').change(function(){
+            $('#tabelaUsuario').DataTable().destroy();
+            carregar();
+        });
+        $('#categoriaSearch').change(function(){
+            $('#tabelaUsuario').DataTable().destroy();
+            carregar();
+        });
+        function carregar(){
             $('#tabelaUsuario').DataTable({
-                "processing": true,
-                "serverSide": true,
-                "order": [],
-                "ajax": {
-                    url: "<?= base_url().'usuario/pega_dados'?>",
-                    type: "POST",
-                    data: {subcategoria:subcategoria} 
+                    "processing": true,
+                    "serverSide": true,
+                    "order": [],
+                    "ajax": {
+                        "url": "<?= base_url().'usuario/pega_dados'?>",
+                        "type": "POST",
+                        "data": function(data)
+                            {
+                            	data.subcategoria = $('#subcategoriaSearch').val();
+                            	data.categoria = $('#categoriaSearch').val();
+                            }
+                        },
+                    "columnDefs": [ {
+                        "targets": [ 4, 5, 6, 7 ],
+                         "orderable": false
+                    } ],
+               "language": {
+                    "zeroRecords": "Nada encontrado - desculpe",
+                    "info": "Mostrando pagina _PAGE_ de _PAGES_",
+                    "infoEmpty": "Nenhum registro disponivel",
+                    "infoFiltered": "(filtrado do total de _MAX_ registros)",
+                    "paginate": {
+                        "first":      "Primeira",
+                        "last":       "Ultima",
+                        "next":       "Proxima",
+                        "previous":   "Anterior"
                     },
-                "columnDefs": [ {
-                    "targets": [ 4, 6, 7 ],
-                     "orderable": false
-                } ],
-           "language": {
-                "zeroRecords": "Nada encontrado - desculpe",
-                "info": "Mostrando pagina _PAGE_ de _PAGES_",
-                "infoEmpty": "Nenhum registro disponivel",
-                "infoFiltered": "(filtrado do total de _MAX_ registros)",
-                "paginate": {
-                    "first":      "Primeira",
-                    "last":       "Ultima",
-                    "next":       "Proxima",
-                    "previous":   "Anterior"
-                },
-                "search":         "Pesquisar:",
-                "loadingRecords": "Carregando...",
-                "processing":     "Processando..."
-        },
-            "lengthChange": false,
-            "pageLength": 15
-       });
+                    "search":         "Pesquisar:",
+                    "loadingRecords": "Carregando...",
+                    "processing":     "Processando..."
+            },
+                "lengthChange": false,
+                "pageLength": 15
+           });
         }
     });
 </script>
@@ -70,10 +79,12 @@
             <th>Nome</th>
             <th>E-mail</th>
             <th>Data</th>
-                <th><select id="subcategoriaSearch" name="subcategoriaSearch" class="form-control">
+            <th><select id="subcategoriaSearch" name="subcategoriaSearch" class="form-control">
                         <option value="">Subcategoria</option>
                 </select></th>
-            <th>Categoria</th>
+            <th><select id="categoriaSearch" name="CategoriaSearch" class="form-control">
+                        <option value="">Categoria</option>
+                </select></th>
             <th>Editar</th>
             <th>Deletar</th>
         </tr>

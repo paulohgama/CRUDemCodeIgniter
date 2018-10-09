@@ -1,6 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-$config['base_url'] = 'http://localhost/CRUDemCodeIgniter';
+$config['base_url'] = 'http://paulo-henriquekbrteccodeigniter.000webhostapp.com/';
 $config['index_page'] = '';
 $config['uri_protocol']	= 'REQUEST_URI';
 $config['url_suffix'] = '';

@@ -2,7 +2,7 @@
 
 class user_model extends MY_Model
 {
-    var $select_columns = array ("usuario_id" ,"usuario_nome", "usuario_email", "usuario_data", "subcategoria_nome", "categoria_nome");
+    var $select_columns = array ("usuario_id" ,"usuario_nome", "usuario_email", "usuario_data", "subcategoria_nome", "categoria_nome", "subcategoria_id", "categoria_id");
     var $order_columns = array ("usuario_id" ,"usuario_nome", "usuario_email", "usuario_data", "subcategoria_nome", "categoria_nome", null, null);
     
     function __construct() 
@@ -61,16 +61,20 @@ class user_model extends MY_Model
     function criar_query()
     {
         $this->db->select($this->select_columns);
-        $this->db->from($this->table);
+        $this->db->from($this->table, 'subcategorias', 'categorias');
         $this->db->join('subcategorias', 'subcategoria_fk = subcategoria_id');
         $this->db->join('categorias', 'categoria_fk = categoria_id');
-        if(isset($_POST['subcategoria']))
+        if(!empty($_POST["subcategoria"]))
         {
-            $this->db->where('subcategoria_id', $_POST['subcategoria']);
+            $this->db->where('subcategoria_id', intval($_POST["subcategoria"]));
         }
-        if(isset($_POST["search"]["value"]))
+        else if(!empty($_POST["categoria"]))
         {
-            $this->db->or_like("usuario_id", $_POST["search"]["value"]);
+            $this->db->where('categoria_id', intval($_POST["categoria"]));
+        }     
+        else if(isset($_POST["search"]["value"]))
+        {
+            $this->db->like("usuario_id", $_POST["search"]["value"]);
             $this->db->or_like("usuario_nome", $_POST["search"]["value"]);
             $this->db->or_like("usuario_email", $_POST["search"]["value"]);
             $this->db->or_like("usuario_data", $_POST["search"]["value"]);
